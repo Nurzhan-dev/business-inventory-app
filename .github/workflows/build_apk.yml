@@ -1,0 +1,40 @@
+name: Flutter CI
+
+# Определяет, когда этот процесс будет запускаться
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build APK
+    # Операционная система, на которой будет выполняться сборка
+    runs-on: ubuntu-latest
+
+    steps:
+      # Проверяем наш код
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Настраиваем Flutter SDK на виртуальной машине
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.1' # Используй последнюю стабильную версию
+          channel: 'stable'
+
+      # Устанавливаем все зависимости, указанные в pubspec.yaml
+      - name: Get dependencies
+        run: flutter pub get
+
+      # Собираем готовый APK-файл
+      - name: Build Android release
+        run: flutter build apk --release
+
+      # Сохраняем APK-файл как артефакт, чтобы его можно было скачать
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release
+          path: build/app/outputs/flutter-apk/app-release.apk
