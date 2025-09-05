@@ -34,7 +34,7 @@ jobs:
 
       # Сохраняем APK-файл как артефакт, чтобы его можно было скачать
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: app-release
           path: build/app/outputs/flutter-apk/app-release.apk
